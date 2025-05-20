@@ -135,6 +135,8 @@ STATICFILES_DIRS = [
 # This is where all static files will be copied for production
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
+# Optional but recommended: Use Whitenoise in production
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
