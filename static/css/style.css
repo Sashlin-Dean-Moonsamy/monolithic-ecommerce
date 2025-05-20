@@ -1,0 +1,177 @@
+/* Light Theme Colors */
+:root {
+    --light-bg: #F2F2F2;       /* Light Gray */
+    --light-card: #EAE4D5;     /* Beige */
+    --light-accent: #B6B09F;   /* Soft Taupe */
+    --text-dark: #000000;      /* Black */
+}
+
+/* Light Theme Styles */
+[data-bs-theme="light"] {
+    background-color: var(--light-bg);
+    color: var(--text-dark);
+
+    --bs-body-bg: var(--light-bg);
+    --bs-body-color: var(--text-dark);
+    --bs-card-bg: var(--light-card);
+    --bs-border-color: var(--light-accent);
+    --bs-navbar-bg: var(--light-card);
+}
+
+/* Dark Theme Styles */
+[data-bs-theme="dark"] {
+    background-color: #121212;
+    color: #e0e0e0;
+
+    --bs-body-bg: #121212;
+    --bs-body-color: #e0e0e0;
+    --bs-card-bg: #1e1e1e;
+    --bs-navbar-bg: #1f1f1f;
+    --bs-border-color: #333;
+}
+
+/* Navbar Text Colors */
+[data-bs-theme="light"] .navbar-brand,
+[data-bs-theme="light"] .nav-link,
+[data-bs-theme="light"] #theme-toggle {
+    color: var(--text-dark);
+}
+
+[data-bs-theme="dark"] .navbar-brand,
+[data-bs-theme="dark"] .nav-link,
+[data-bs-theme="dark"] #theme-toggle {
+    color: #ffffff;
+}
+
+[data-bs-theme="dark"] .navbar-brand:hover,
+[data-bs-theme="dark"] .nav-link:hover {
+    color: #cccccc;
+}
+
+/* Global Transitions */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Card Styling */
+.card {
+    background-color: var(--bs-card-bg);
+    border: 1px solid var(--bs-border-color);
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+}
+
+.card:active {
+    transform: translateY(-2px) scale(0.99);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Product Card Styling */
+.product-card img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+.product-card-title {
+    font-size: 1.25rem;
+    margin-top: 0.5rem;
+    color: var(--text-dark);
+}
+
+.product-card-price {
+    font-weight: bold;
+    color: var(--text-dark);
+}
+
+/* Dark Theme overrides for product card text */
+[data-bs-theme="dark"] .product-card-title,
+[data-bs-theme="dark"] .product-card-price {
+    color: #ffffff;
+}
+
+/* Navbar Styling */
+.navbar {
+    background-color: var(--bs-navbar-bg);
+}
+
+.navbar-brand, .nav-link {
+    color: var(--text-dark);
+}
+
+.navbar-brand:hover, .nav-link:hover {
+    color: var(--light-accent);
+}
+
+button#theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-dark);
+    cursor: pointer;
+}
+
+/* Hero Video Section */
+.hero-video {
+    position: relative;
+    height: 70vh;
+    overflow: hidden;
+}
+
+.hero-video video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+    filter: brightness(0.8);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    color: #fff;
+    text-align: center;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* Flashing Accent Animation */
+@keyframes flash-light-accent {
+    0%, 100% {
+        background-color: transparent;
+        color: var(--text-dark);
+        border: 2px solid var(--light-accent);
+    }
+    50% {
+        background-color: var(--light-accent);
+        color: #000;
+        border: 2px solid var(--light-accent);
+    }
+}
+
+/* Flashing Browse Products Button */
+.browse-flash-link {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    border: 2px solid var(--light-accent);
+    background-color: transparent;
+    color: var(--text-dark);
+    animation: flash-light-accent 2.5s infinite ease-in-out;
+    transition: all 0.3s ease;
+}
+
+.browse-flash-link:hover {
+    background-color: var(--light-accent);
+    color: #000;
+}

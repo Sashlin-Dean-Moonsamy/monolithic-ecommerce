@@ -1,0 +1,23 @@
+{% comment %}
+Reusable product card template that can be included in shop and search results pages.
+Usage: {% include 'store/includes/product_card.html' with product=product %}
+{% endcomment %}
+
+<div class="col">
+    <div class="card h-100 shadow-sm">
+        <a href="{% url 'product_detail' product.pk %}" class="text-decoration-none">
+            {% if product.primary_image_url %}
+                <img src="{{ product.primary_image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+            {% else %}
+                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <div class="product-card-title">{{ product.name }}</div>
+                <div class="product-card-price">R{{ product.price }}</div>
+                <div class="browse-flash-link">View Details</div>
+            </div>
+        </a>
+    </div>
+</div> 

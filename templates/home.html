@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Home | My Ecommerce{% endblock %}
+
+{% block content %}
+<div class="hero-video mb-5">
+    <video autoplay muted loop playsinline>
+        <source src="https://ik.imagekit.io/sashlin/855333-hd_1920_1080_30fps.mp4?updatedAt=1747730069332" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="container hero-content">
+        <h1 class="display-4 fw-bold">Welcome to My Ecommerce</h1>
+        <p class="lead">Top quality water heaters for every home and budget.</p>
+        <a href="/shop" class="browse-flash-link">Browse Products</a>
+
+    </div>
+</div>
+
+<hr class="my-5">
+
+<div class="row text-center">
+    <div class="col-md-4">
+        <div class="card p-3 mb-4">
+            <h4>Trusted Brands</h4>
+            <p>We work with top-tier manufacturers to ensure durability and performance.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-3 mb-4">
+            <h4>Fast Delivery</h4>
+            <p>Same-day delivery in major cities for most geysers.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-3 mb-4">
+            <h4>Expert Support</h4>
+            <p>Our technicians are ready to guide you in finding the perfect product.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

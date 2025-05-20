@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}{% if query %}Search Results for "{{ query }}"{% else %}Search Products{% endif %} | My Ecommerce{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4 text-center">{% if query %}Search Results for "{{ query }}"{% else %}Search Products{% endif %}</h1>
+    
+    {% if query %}
+        {% if products %}
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                {% for product in products %}
+                    {% include 'store/includes/product_card.html' with product=product %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert text-center" style="background-color: var(--light-accent); color: var(--text-dark); border: none;">
+                No products found matching "{{ query }}".
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="alert text-center" style="background-color: var(--light-accent); color: var(--text-dark); border: none;">
+            Please enter a search term to find products.
+        </div>
+    {% endif %}
+</div>
+{% endblock %} 

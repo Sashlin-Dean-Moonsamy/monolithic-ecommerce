@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+{% block title %}Shopping Cart | My Ecommerce{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4 text-center">Shopping Cart</h1>
+
+    {% if cart.items.exists %}
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Cart Items -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        {% for item in cart.items.all %}
+                        <div class="row align-items-center mb-4 pb-3 border-bottom">
+                            <div class="col-md-2">
+                                <img src="{{ item.product.primary_image_url }}" class="img-fluid rounded" alt="{{ item.product.name }}">
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="mb-1">{{ item.product.name }}</h5>
+                                <p class="text-muted mb-0">R{{ item.product.price }}</p>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="input-group">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" onclick="updateQuantity({{ item.id }}, 'decrease')">-</button>
+                                    <input type="number" class="form-control form-control-sm text-center" value="{{ item.quantity }}" min="1" onchange="updateQuantity({{ item.id }}, 'set', this.value)">
+                                    <button class="btn btn-outline-secondary btn-sm" type="button" onclick="updateQuantity({{ item.id }}, 'increase')">+</button>
+                                </div>
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <p class="mb-0 fw-bold">R{{ item.total_price }}</p>
+                            </div>
+                            <div class="col-md-1 text-end">
+                                <a href="{% url 'remove_from_cart' item.id %}" class="text-danger" title="Remove item">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <!-- Cart Actions -->
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'shop' %}" class="btn custom-btn">
+                        <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                    </a>
+                    <a href="{% url 'clear_cart' %}" class="btn custom-btn" onclick="return confirm('Are you sure you want to clear your cart?')">
+                        <i class="bi bi-trash me-2"></i>Clear Cart
+                    </a>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title mb-4">Order Summary</h5>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Subtotal</span>
+                            <span>R{{ cart.total_price }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3">
+                            <span>Shipping</span>
+                            <span>Free</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <span class="fw-bold">Total</span>
+                            <span class="fw-bold">R{{ cart.total_price }}</span>
+                        </div>
+                        <button class="btn custom-btn w-100" onclick="alert('Checkout functionality coming soon!')">
+                            <i class="bi bi-credit-card me-2"></i>Proceed to Checkout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-cart-x display-1 mb-3" style="color: var(--light-accent);"></i>
+            <h3 class="mb-3">Your cart is empty</h3>
+            <p class="text-muted mb-4">Looks like you haven't added any items to your cart yet.</p>
+            <a href="{% url 'shop' %}" class="browse-flash-link">Start Shopping</a>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+function updateQuantity(itemId, action, value = null) {
+    let input = event.target.parentElement.querySelector('input');
+    let currentValue = parseInt(input.value);
+    
+    if (action === 'increase') {
+        input.value = currentValue + 1;
+    } else if (action === 'decrease' && currentValue > 1) {
+        input.value = currentValue - 1;
+    } else if (action === 'set') {
+        input.value = value;
+    }
+    
+    fetch(`/cart/update/${itemId}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': getCookie('csrftoken')
+        },
+        body: `quantity=${input.value}`
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+{% endblock %} 

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block title %}{{ product.name }} | My Ecommerce{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'shop' %}" class="text-decoration-none" style="color: var(--light-accent);">Shop</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Product Images -->
+        <div class="col-md-6 mb-4">
+            <div id="productImageCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner rounded shadow">
+                    {% if product.primary_image_url %}
+                    <div class="carousel-item active">
+                        <img src="{{ product.primary_image_url }}" class="d-block w-100" alt="{{ product.name }}" style="height: 500px; object-fit: contain; background-color: var(--bs-card-bg);">
+                    </div>
+                    {% endif %}
+                    {% for image in product_images %}
+                    <div class="carousel-item">
+                        <img src="{{ image.image_url }}" class="d-block w-100" alt="{{ product.name }} - Image {{ forloop.counter }}" style="height: 500px; object-fit: contain; background-color: var(--bs-card-bg);">
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if product.primary_image_url or product_images %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#productImageCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#productImageCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+                {% endif %}
+            </div>
+
+            <!-- Thumbnail Navigation -->
+            {% if product.primary_image_url or product_images %}
+            <div class="row mt-3 g-2">
+                {% if product.primary_image_url %}
+                <div class="col-3">
+                    <img src="{{ product.primary_image_url }}" class="img-thumbnail cursor-pointer" alt="Thumbnail" style="height: 80px; object-fit: cover;" data-bs-target="#productImageCarousel" data-bs-slide-to="0">
+                </div>
+                {% endif %}
+                {% for image in product_images %}
+                <div class="col-3">
+                    <img src="{{ image.image_url }}" class="img-thumbnail cursor-pointer" alt="Thumbnail" style="height: 80px; object-fit: cover;" data-bs-target="#productImageCarousel" data-bs-slide-to="{{ forloop.counter }}">
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Product Details -->
+        <div class="col-md-6">
+            <div class="card border-0 bg-transparent">
+                <div class="card-body p-0">
+                    <h1 class="h2 mb-3">{{ product.name }}</h1>
+                    <div class="h3 mb-4" style="color: var(--light-accent);">R{{ product.price }}</div>
+                    
+                    <div class="mb-4">
+                        <h5 class="mb-3">Description</h5>
+                        <p class="text-muted">{{ product.description|linebreaks }}</p>
+                    </div>
+
+                    <form action="{% url 'add_to_cart' product.id %}" method="POST" class="mb-3">
+                        {% csrf_token %}
+                        <div class="input-group mb-3">
+                            <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity()">-</button>
+                            <input type="number" class="form-control text-center" id="quantity" name="quantity" value="1" min="1" style="max-width: 80px;">
+                            <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity()">+</button>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-lg custom-btn">
+                                <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                            </button>
+                            <button type="button" class="btn custom-btn">
+                                <i class="bi bi-heart me-2"></i>Add to Wishlist
+                            </button>
+                        </div>
+                    </form>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-truck me-2" style="color: var(--light-accent);"></i>
+                        <span>Free shipping on orders over R500</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-arrow-return-left me-2" style="color: var(--light-accent);"></i>
+                        <span>30-day return policy</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-shield-check me-2" style="color: var(--light-accent);"></i>
+                        <span>Secure payment</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.cursor-pointer {
+    cursor: pointer;
+}
+.cursor-pointer:hover {
+    opacity: 0.8;
+}
+
+.custom-btn {
+    background-color: transparent;
+    border: 2px solid var(--light-accent);
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    transform: translateY(0);
+}
+
+.custom-btn:hover {
+    background-color: var(--light-accent);
+    color: #000;
+    transform: translateY(-4px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-bs-theme="dark"] .custom-btn {
+    background-color: transparent;
+    border: 2px solid var(--light-accent);
+    color: #fff;
+}
+
+[data-bs-theme="dark"] .custom-btn:hover {
+    background-color: var(--light-accent);
+    color: #000;
+}
+
+/* Remove card hover effect */
+.card {
+    transition: none;
+}
+
+.card:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.card:active {
+    transform: none;
+    box-shadow: none;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add click handlers to thumbnails
+    document.querySelectorAll('.img-thumbnail').forEach(thumbnail => {
+        thumbnail.addEventListener('click', function() {
+            const slideIndex = this.getAttribute('data-bs-slide-to');
+            const carousel = document.getElementById('productImageCarousel');
+            const bsCarousel = new bootstrap.Carousel(carousel);
+            bsCarousel.to(slideIndex);
+        });
+    });
+});
+
+function increaseQuantity() {
+    const input = document.getElementById('quantity');
+    input.value = parseInt(input.value) + 1;
+}
+
+function decreaseQuantity() {
+    const input = document.getElementById('quantity');
+    const value = parseInt(input.value);
+    if (value > 1) {
+        input.value = value - 1;
+    }
+}
+</script>
+{% endblock %} 
