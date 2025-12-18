@@ -14,7 +14,7 @@ The project includes features such as:
 
 1. **Clone the repository:**
    ```bash
-   git clone <repository-url>
+   git clone Sashlin-Dean-Moonsamy/monolithic-ecommerce
    cd ecommerce
    ```
 
